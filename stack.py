@@ -28,14 +28,16 @@ class Stack(StackInterface[T]):
         self.lock = threading.Lock()
 
     def pop(self) -> T:
+        print('Deleting ...')
         with self.lock :
-            if self.empty :
+            if self.empty == True:
                 raise Exception("this list is empty")
             return self._list.remove_first()
         
     
     def push(self, value: T) -> None:
         with self.lock:
+            print('Inserting ...')
             self._list.insert_first(value)
     
 
