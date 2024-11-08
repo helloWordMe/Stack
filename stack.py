@@ -28,7 +28,6 @@ class Stack(StackInterface[T]):
         self.lock = threading.Lock()
 
     def pop(self) -> T:
-        print('Deleting ...')
         with self.lock :
             if self.empty == True:
                 raise Exception("this list is empty")
@@ -37,9 +36,12 @@ class Stack(StackInterface[T]):
     
     def push(self, value: T) -> None:
         with self.lock:
-            print('Inserting ...')
             self._list.insert_first(value)
     
+    def peek(self):
+        if not self.is_empty():
+            return self.items[-1]
+        return None
 
     def empty(self) -> bool:
         """return True if list empty"""
