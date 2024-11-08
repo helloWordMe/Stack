@@ -9,7 +9,6 @@ def count_html_tags(file_path):
 
     tags = re.findall(r'[<>/]', content)
 
-    tag_count = len(tags)
     return tags
 
 def push_stack(tags : list):
@@ -20,11 +19,9 @@ def push_stack(tags : list):
     return stack    
 
 def compile_html_file(stack: Stack):
-    num_open = 0
-    num_close = 0 
-    open_tag = Stack[str]()
-    close_tag = Stack[str]()  # پشته جدید برای نگهداری تگ‌های باز
-    while True:
+
+    open_tag = Stack[str]() 
+    while stack.empty() == False:
         ele_one = stack.pop()
         ele_two = ''
         ele_three = ''
@@ -35,15 +32,17 @@ def compile_html_file(stack: Stack):
             ele_two = stack.pop()
             
             if ele_two == '>':
-                num_open += 1
+
                 open_tag.push('<>')
             
             elif ele_two == '/':
                 ele_three = stack.pop()
             
                 if ele_three == '>':
-                    num_close += 1
-                    close_tag.push('</>')
+
+                    tag = open_tag.pop()
+                    if tag != '<>':
+                        raise Exception('Missing open tag <>')
             
                 else:
                     raise Exception('missing >')
@@ -55,14 +54,10 @@ def compile_html_file(stack: Stack):
         else:
             raise Exception('Wrang syntax ...')
         
-        if stack.empty()==True:
-            break
-    if num_close == num_open :
-        print("your code is Right")
+    if open_tag.empty() == True:
+        print('your code is right')
     else:
-        raise Exception('Wrang syntax ...')
-
-
+        raise Exception('Wrong syntax...')   
 
 
 tags = count_html_tags(file_path)
